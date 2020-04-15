@@ -209,20 +209,20 @@ class SmallWindow(GObject.Object, Peas.Activatable):
                     title=entry.get_string(RB.RhythmDBPropType.TITLE),
                     album=entry.get_string(RB.RhythmDBPropType.ALBUM),
                     artist=entry.get_string(RB.RhythmDBPropType.ARTIST)))
-
             key = entry.create_ext_db_key(RB.RhythmDBPropType.ALBUM)
             self.album_art_db.request(key,
                                       self.display_song_album_art_callback,
                                       entry)
 
-    def display_song_album_art_callback(self, key, filename, data, entry):
+    def display_song_album_art_callback(self, key, other_key, filename, data, entry):
         if ( ( data is not None ) and ( isinstance(data, GdkPixbuf.Pixbuf) ) ):
             self.cover_pixbuf = data
-            scale_cover = self.cover_pixbuf.scale_simple(24, 24,
+            scale_cover = self.cover_pixbuf.scale_simple(124, 124,
                                                          GdkPixbuf.InterpType.HYPER)
 
             self.album_cover.set_from_pixbuf(scale_cover)
         else:
+            self.song_button_label.set_text(f"data: {key}, {filename}, {data}, {entry},")
             self.cover_pixbuf = None
             self.album_cover.clear()
 
