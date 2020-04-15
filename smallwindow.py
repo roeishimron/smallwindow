@@ -96,6 +96,7 @@ class SmallWindow(GObject.Object, Peas.Activatable):
         # Basic Activation Procedure
         self.shell = self.object
         self.main_window = self.shell.props.window
+        self.on_small = False
 
         # Prepare internal variables
         self.song_duration = 0
@@ -107,15 +108,16 @@ class SmallWindow(GObject.Object, Peas.Activatable):
 
         # Build up actions.
         self.action_group = ActionGroup(self.shell, 'small window actions')
-        action = self.action_group.add_action(
-            func=self.small_window_action,
+        self.action_group.add_action_with_accel(
+            func=self.toggle_windows,
             action_name='SmallWindow',
             label='Small Window',
-            action_type='app')
+            action_type='app',
+            accel="<Control>m")
 
         self._appshell = ApplicationShell(self.shell)
         self._appshell.insert_action_group(self.action_group)
-        self._appshell.add_app_menuitems(ui_string, 'small window actions')
+        self._appshell.add_app_menuitems(ui_string, 'small window actions', 'view')
 
         # Build up small window interface
         builder = Gtk.Builder()
@@ -227,6 +229,13 @@ class SmallWindow(GObject.Object, Peas.Activatable):
             self.album_cover.clear()
 
     # Signal Handlers ##########################################################
+
+    def toggle_windows(self, *args):
+        if self.on_small:
+            self.on_small = False
+            return self.main_window_action()
+        self.on_small = True
+        return self.small_window_action()
 
     def small_window_action(self, *args):
         self.main_window.hide()
