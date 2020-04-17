@@ -231,6 +231,9 @@ class SmallWindow(GObject.Object, Peas.Activatable):
     # Signal Handlers ##########################################################
 
     def toggle_windows(self, *args):
+
+        self.small_window.move(0, 0)
+
         if self.on_small:
             self.on_small = False
             return self.main_window_action()
