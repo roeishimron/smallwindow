@@ -517,7 +517,6 @@ class ActionGroup(object):
                 self.actiongroup.add_action(action)
 
             if accel is not None:
-                print(f"adding accel {accel} and {[accel] == ['<Control>m']}", file=sys.stderr)
                 app.set_accels_for_action(action_type + "." + action_name, [accel])
         else:
             if 'stock_id' in args:
